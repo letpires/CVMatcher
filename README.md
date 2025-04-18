@@ -43,3 +43,13 @@ Possibilities:
 • Use IPFS + blockchain to store documents with metadata.
 • Create an NFT as a professional identity (optional), pointing to the adapted and updated resume.
 • Ensure privacy through encryption and user-controlled access.
+
+
+
+## Features to add/improve
+
+- Buttom to choose the language
+- Check how to have input files with open ai (https://stackoverflow.com/questions/77469097/how-can-i-process-a-pdf-using-openais-apis-gpts)
+- Response pdf to download
+- Request to Github is not working yet
+- Verify blockchain part
