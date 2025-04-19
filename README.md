@@ -53,4 +53,4 @@ Use a public or private blockchain to store the most important information in a 
 
 # Demo - version 1
 
-![Demo](https://github.com/letpires/CVMatcher/blob/main/CVMatcher%20-%20demo_version1.mov)
+![Demo](https://github.com/letpires/CVMatcher/blob/main/demo_version1.gif)
