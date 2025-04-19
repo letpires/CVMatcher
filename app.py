@@ -1,6 +1,6 @@
 import streamlit as st
 from dotenv import load_dotenv
-from resume_analyzer import analyze_resume, get_github_projects
+from resume_analyzer import analyze_resume_and_job
 
 # Load environment variables
 load_dotenv()
@@ -18,18 +18,12 @@ linkedin_url = st.text_input("LinkedIn Profile URL (optional):")
 if st.button("Analyze"):
     if resume and job_description:
         with st.spinner("Analyzing your resume and job description..."):
-            # Get GitHub data if username provided
-            github_data = get_github_projects(github_username) if github_username else None
-            
-            # For now, LinkedIn data is just a placeholder
-            linkedin_data = {"url": linkedin_url} if linkedin_url else None
-            
-            # Analyze resume
-            result = analyze_resume(
+            # Analyze resume using the LangGraph workflow
+            result = analyze_resume_and_job(
                 resume=resume,
                 job_description=job_description,
-                github_data=github_data,
-                linkedin_data=linkedin_data
+                github_username=github_username,
+                linkedin_url=linkedin_url
             )
             
             # Display results in tabs
