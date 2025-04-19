@@ -6,23 +6,23 @@ The objective is to create an intelligent platform that generates a personalized
 
 ### How it works
 
-Data Input
+#### Data Input
 The user provides:
-• Their original resume (via upload or guided form).
-• A link or description of the job they’re applying for.
-• (Optional) Connects accounts (via API or scraping):
-• LinkedIn: to import experience, recommendations, certifications.
-• GitHub: to import projects, contributions, technologies used.
+- Their original resume (via upload or guided form).
+- A link or description of the job they’re applying for.
+- (Optional) Connects accounts (via API or scraping):
+- LinkedIn: to import experience, recommendations, certifications.
+- GitHub: to import projects, contributions, technologies used.
 
 ### AI Processing
-• An AI agent analyzes the resume and the job posting.
-• Generates a customized version of the resume tailored to the role (highlighting keywords, most relevant experiences, etc.).
-• Suggests improvements and/or missing fields (e.g., recommended courses, missing keywords).
+- An AI agent analyzes the resume and the job posting.
+- Generates a customized version of the resume tailored to the role (highlighting keywords, most relevant experiences, etc.).
+- Suggests improvements and/or missing fields (e.g., recommended courses, missing keywords).
 
 ### Extra Features
-• Suggestions for projects or summaries to highlight based on GitHub data.
-• Automatic import of relevant public information.
-• Option to save multiple resume versions for different job types.
+- Suggestions for projects or summaries to highlight based on GitHub data.
+- Automatic import of relevant public information.
+- Option to save multiple resume versions for different job types.
 
 ⸻
 
@@ -32,14 +32,14 @@ In traditional systems, user data (resumes, application history, adapted version
 
 #### Proposed Solution: 
 Use a public or private blockchain to store the most important information in a decentralized way, ensuring:
-• Data Ownership: users remain the owners of their resumes and history.
-• Guaranteed Access: even if the company/platform ceases to exist, the data remains accessible via the blockchain.
-• Transparency & Trust: each resume update can be recorded, creating an immutable version history (which can even serve as a career portfolio).
+- Data Ownership: users remain the owners of their resumes and history.
+- Guaranteed Access: even if the company/platform ceases to exist, the data remains accessible via the blockchain.
+- Transparency & Trust: each resume update can be recorded, creating an immutable version history (which can even serve as a career portfolio).
 
 #### Possibilities:
-• Use IPFS + blockchain to store documents with metadata.
-• Create an NFT as a professional identity (optional), pointing to the adapted and updated resume.
-• Ensure privacy through encryption and user-controlled access.
+- Use IPFS + blockchain to store documents with metadata.
+- Create an NFT as a professional identity (optional), pointing to the adapted and updated resume.
+- Ensure privacy through encryption and user-controlled access.
 
 
 
