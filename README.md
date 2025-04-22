@@ -44,9 +44,12 @@ Use a public or private blockchain to store the most important information in a 
 # Running the app
 
 - npm install
+- pip install -r requirements.txt
 - npm run dev
 
 # Features to add/improve
+
+- Leverage leticia python files? https://github.com/letpires/CVMatcher/tree/7ab3e4b03acf6514fe83333885362f4a0b3762ab
 
 - Buttom to choose the language
 - Check how to have input files with open ai (https://stackoverflow.com/questions/77469097/how-can-i-process-a-pdf-using-openais-apis-gpts)
