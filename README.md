@@ -41,7 +41,10 @@ Use a public or private blockchain to store the most important information in a 
 - Create an NFT as a professional identity (optional), pointing to the adapted and updated resume.
 - Ensure privacy through encryption and user-controlled access.
 
+# Running the app
 
+- npm install
+- npm run dev
 
 # Features to add/improve
 
