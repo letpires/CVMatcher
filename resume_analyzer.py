@@ -6,6 +6,7 @@ from langgraph.graph import StateGraph, END
 import requests
 import json
 from datetime import datetime
+import os
 
 # Initialize the LLM
 llm = ChatOpenAI(model="gpt-4-turbo-preview")
@@ -50,12 +51,73 @@ def get_github_projects(state: ResumeState) -> ResumeState:
     return state
 
 def summarize_linkedin_data(state: ResumeState) -> ResumeState:
-    """Summarize LinkedIn profile data."""
-    # Note: This is a placeholder. In a real implementation, you'd need LinkedIn API access
+    access_token = os.getenv("LINKEDIN_ACCESS_TOKEN")
+    # bail out if no URL or no token
+    if not state['linkedin_url'] or not access_token:
+        state['linkedin_data'] = {}
+        return state
+
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "X-Restli-Protocol-Version": "2.0.0"
+    }
+
+    # 1) Basic profile
+    profile_resp = requests.get(
+        "https://api.linkedin.com/v2/me",
+        headers=headers
+    )
+    profile = profile_resp.json()
+
+    # 2) Email address
+    email_resp = requests.get(
+        "https://api.linkedin.com/v2/emailAddress"
+        "?q=members&projection=(elements*(handle~))",
+        headers=headers
+    )
+    email = email_resp.json()
+
+    # 3) (Optional) Positions / experience
+    positions_resp = requests.get(
+        "https://api.linkedin.com/v2/positions",
+        headers=headers
+    )
+    positions = positions_resp.json()
+
+    # 4) Education history
+    edu_resp = requests.get(
+        "https://api.linkedin.com/v2/educationHistory"
+        "?q=members&projection=(elements*(schoolName,degree,fieldOfStudy,startDate,endDate))",
+        headers=headers
+    )
+    educations = edu_resp.json()
+
+    # 5) Skills
+    skills_resp = requests.get(
+        "https://api.linkedin.com/v2/skills"
+        "?q=members&projection=(elements*(name,proficiency))",
+        headers=headers
+    )
+    skills = skills_resp.json()
+
+    # 6) Recommendations received
+    recs_resp = requests.get(
+        "https://api.linkedin.com/v2/recommendationsReceived"
+        "?q=recipient&projection=(elements*(recommendationText,recommender~(firstName,lastName,profilePicture)))",
+        headers=headers
+    )
+    recs = recs_resp.json()
+
     state['linkedin_data'] = {
-        "experience": "Senior Software Engineer at Company X",
-        "skills": ["Python", "Machine Learning", "Data Science"],
-        "education": "BS in Computer Science"
+        "id": profile.get("id"),
+        "firstName": profile.get("localizedFirstName"),
+        "lastName": profile.get("localizedLastName"),
+        "headline": profile.get("headline"),
+        "email": email["elements"][0]["handle~"]["emailAddress"],
+        "positions": positions.get("elements", []),
+        "education": educations.get("elements", []),
+        "skills": skills.get("elements", []),
+        "recommendations": recs.get("elements", []),
     }
     return state
 
@@ -215,4 +277,4 @@ def analyze_resume_and_job(resume: str, job_description: str, github_username: s
         "recommendations": result["recommendations"],
         "ipfs_hash": result["ipfs_hash"],
         "version_history": result["version_history"]
-    } 
+    }
