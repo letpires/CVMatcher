@@ -114,13 +114,13 @@ export default function UploadTab() {
 
       setState(prev => ({ ...prev, loading: false, success: true }));
 
-      // If both job listing and CV are uploaded successfully, move to next tab
+      // If both job listing and CV are uploaded successfully, move to Generate CV tab
       if (
         (type === 'job' && cv.success) || 
         (type === 'cv' && jobListing.success)
       ) {
         setTimeout(() => {
-          setActiveTab('match');
+          setActiveTab('generate');
         }, 1500);
       }
     } catch (error) {
