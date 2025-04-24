@@ -1,2 +1,7 @@
-openai
+flask
+flask-cors
 python-dotenv
+openai
+langchain-community
+langchain-core
+requests
