@@ -11,6 +11,14 @@ import os
 # Initialize the LLM
 llm = ChatOpenAI(model="gpt-4-turbo-preview")
 
+
+# Uncomment the following lines to use Venice API
+# llm = ChatOpenAI(
+#     model="gpt-4-turbo-preview",
+#     openai_api_key=os.getenv("VENICE_API_KEY"),
+#     openai_api_base="https://api.venice.ai/v1"  # Venice endpoint
+# )
+
 # Define the state type
 class ResumeState(TypedDict):
     resume: str
