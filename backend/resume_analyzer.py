@@ -114,6 +114,54 @@ def get_github_projects(github_username: Optional[str]) -> Dict:
     except Exception as e:
         return {"error": str(e)}
 
+def get_linkedin_data(linkedin_url: Optional[str]) -> Dict:
+    """Fetch LinkedIn profile, email, and experience via the LinkedIn REST API."""
+    if not linkedin_url:
+        return {}
+
+    access_token = os.getenv("LINKEDIN_ACCESS_TOKEN")
+    if not access_token:
+        return {"error": "LinkedIn access token not found. Please set LINKEDIN_ACCESS_TOKEN."}
+
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "X-Restli-Protocol-Version": "2.0.0"
+    }
+    data: Dict = {}
+
+    try:
+        # Basic profile
+        profile_resp = requests.get("https://api.linkedin.com/v2/me", headers=headers)
+        if profile_resp.ok:
+            data["profile"] = profile_resp.json()
+        else:
+            data["profile_error"] = profile_resp.text
+
+        # Email address
+        email_resp = requests.get(
+            "https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))",
+            headers=headers
+        )
+        if email_resp.ok:
+            data["email"] = email_resp.json()
+        else:
+            data["email_error"] = email_resp.text
+
+        # Positions (experience)
+        positions_resp = requests.get(
+            "https://api.linkedin.com/v2/positions?q=member&start=0&count=10",
+            headers=headers
+        )
+        if positions_resp.ok:
+            data["positions"] = positions_resp.json()
+        else:
+            data["positions_error"] = positions_resp.text
+
+    except Exception as e:
+        return {"error": str(e)}
+
+    return data
+
 def analyze_resume_and_job(resume: str = "", job_description: str = "", github_username: Optional[str] = None, linkedin_url: Optional[str] = None, use_sample_data: bool = False) -> Dict:
     """
     Analyze a resume against a job description and provide tailored feedback using LangChain.
@@ -131,9 +179,10 @@ def analyze_resume_and_job(resume: str = "", job_description: str = "", github_u
         if not resume or not job_description:
             raise ValueError("Resume and job description are required")
 
-        # Fetch GitHub data if username provided
+        # Fetch GitHub and LinkedIn data
         github_data = get_github_projects(github_username)
-        
+        linkedin_data = get_linkedin_data(linkedin_url)
+
         # Initialize state
         state = ResumeState(
             resume=resume,
@@ -141,32 +190,34 @@ def analyze_resume_and_job(resume: str = "", job_description: str = "", github_u
             github_username=github_username,
             linkedin_url=linkedin_url,
             github_data=github_data,
-            linkedin_data={},  # Placeholder for LinkedIn data
+            linkedin_data=linkedin_data,
             analysis="",
             tailored_resume="",
             recommendations=""
         )
 
-        # Step 1: Analyze the match
+        # Step 1: Analyze the match (include linkedin_data)
         analysis_prompt = ChatPromptTemplate.from_messages([
             ("system", """You are an expert resume analyzer. Analyze the resume and job description to identify:
-            1. Key skills and experiences that match the job requirements
-            2. Missing skills or experiences
-            3. Overall match percentage
-            4. Areas for improvement
-            
-            Consider any GitHub projects if available.
-            Format your response with clear sections and bullet points."""),
+1. Key skills and experiences that match the job requirements
+2. Missing skills or experiences
+3. Overall match percentage
+4. Areas for improvement
+
+Consider any GitHub projects and LinkedIn data if available.
+Format your response with clear sections and bullet points."""),
+
             ("human", """Resume: {resume}
-            Job Description: {job_description}
-            GitHub Data: {github_data}""")
+Job Description: {job_description}
+GitHub Data: {github_data}
+LinkedIn Data: {linkedin_data}""")
         ])
-        
         analysis_chain = analysis_prompt | llm | StrOutputParser()
         state["analysis"] = analysis_chain.invoke({
             "resume": state["resume"],
             "job_description": state["job_description"],
-            "github_data": json.dumps(state["github_data"], indent=2)
+            "github_data": json.dumps(state["github_data"], indent=2),
+            "linkedin_data": json.dumps(state["linkedin_data"], indent=2)
         })
 
         # Step 2: Generate tailored resume
@@ -229,4 +280,4 @@ def analyze_resume_and_job(resume: str = "", job_description: str = "", github_u
             "status": "error",
             "error": str(e),
             "timestamp": datetime.now().isoformat()
-        } 
+        }

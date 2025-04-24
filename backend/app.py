@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify, make_response, redirect, session
 from flask_cors import CORS
 import os
 from datetime import datetime
@@ -7,6 +7,8 @@ import logging
 from resume_analyzer import analyze_resume_and_job
 from dotenv import load_dotenv
 import json
+from urllib.parse import urlencode
+import requests
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -267,6 +269,50 @@ def analyze_cv():
         logger.error(f"Error in analyze_cv: {str(e)}")
         return create_json_response({'error': str(e)}, 500)
 
+@app.route("/api/linkedin/auth")
+def linkedin_auth():
+    """Redirect user to LinkedIn for OAuth2 authorization."""
+    client_id = os.getenv("LINKEDIN_CLIENT_ID")
+    redirect_uri = os.getenv("LINKEDIN_REDIRECT_URI")
+    scope = "r_liteprofile r_emailaddress"
+    state = str(uuid.uuid4())
+    session["linkedin_oauth_state"] = state
+
+    params = {
+        "response_type": "code",
+        "client_id": client_id,
+        "redirect_uri": redirect_uri,
+        "scope": scope,
+        "state": state,
+    }
+    auth_url = "https://www.linkedin.com/oauth/v2/authorization?" + urlencode(params)
+    return redirect(auth_url)
+
+@app.route("/api/linkedin/callback")
+def linkedin_callback():
+    """Handle LinkedIn OAuth2 callback, exchange code for access token."""
+    code = request.args.get("code")
+    state = request.args.get("state")
+    if state != session.get("linkedin_oauth_state"):
+        return jsonify({"error": "Invalid state"}), 400
+
+    token_url = "https://www.linkedin.com/oauth/v2/accessToken"
+    data = {
+        "grant_type": "authorization_code",
+        "code": code,
+        "redirect_uri": os.getenv("LINKEDIN_REDIRECT_URI"),
+        "client_id": os.getenv("LINKEDIN_CLIENT_ID"),
+        "client_secret": os.getenv("LINKEDIN_CLIENT_SECRET"),
+    }
+    headers = {"Content-Type": "application/x-www-form-urlencoded"}
+    resp = requests.post(token_url, data=data, headers=headers)
+    token_data = resp.json()
+    access_token = token_data.get("access_token")
+
+    # store in session or return to frontend
+    session["LINKEDIN_ACCESS_TOKEN"] = access_token
+    return jsonify({"access_token": access_token})
+
 @app.after_request
 def after_request(response):
     """Ensure all responses have the correct content type."""
@@ -279,4 +325,4 @@ def after_request(response):
 
 if __name__ == '__main__':
     logger.info("Starting Flask server...")
-    app.run(debug=True, port=5001) 
+    app.run(debug=True, port=5001)
