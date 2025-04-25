@@ -1,62 +1,117 @@
-# 📝 CVMatcher: Smart and Decentralized Resume
+![Slogan](https://github.com/letpires/CVMatcher/blob/main/slogan_CVMatcher.png)
 
-The objective is to create an intelligent platform that generates a personalized resume tailored to a specific job, using artificial intelligence, user data (original resume, LinkedIn, GitHub, etc.), and decentralized technologies to ensure data security, autonomy, and permanence.
 
-⸻
+CVMatcher is an intelligent platform that generates personalized resumes tailored to specific job postings. By leveraging **AI** and **decentralized technologies**, it ensures data security, autonomy, and permanence, empowering users to take control of their professional journey.
 
-### How it works
+## ❓ The Problem
 
-#### Data Input
+- **Generic resumes don’t work anymore**:  
+  Every job has its own requirements, but tailoring a resume for each one can be time-consuming and overwhelming.
+
+- **Unequal access to recruitment technology**:  
+  Companies use AI to filter candidates, but job seekers often lack similar tools to optimize their applications.
+
+- **Difficulty tracking multiple job applications**:  
+  Managing different versions of resumes and tracking applications can be chaotic.
+
+- **Centralization risks**:  
+  Platforms like Orkut and MSN disappeared, taking user data with them. Centralized platforms can vanish, leaving users without access to their professional history.
+
+
+## 💡 The Solution
+
+CVMatcher addresses these challenges by combining **AI** and **blockchain** to create **smart, personalized, and permanent resumes**:
+
+- **AI-Powered Resume Customization**:
+  - Analyzes job descriptions.
+  - Matches them with your resume.
+  - Generates tailored versions.
+  - Recommends improvements (e.g., courses, keywords, projects).
+  - Highlights less prominent skills.
+  - Tracks multiple job applications with ease.
+
+- **Decentralized Data Ownership**:
+  - Your data is yours — forever.
+  - Stored via **IPFS + Blockchain**.
+  - Immutable version history.
+  - **NFT** as a professional identity.
+
+
+## 📅 Roadmap
+
+### ✅ MVP - Completed
+- [x] Resume vs. Job Matching
+- [x] Tailored Resume Generation
+- [x] Recommendations (courses, projects)
+- [x] PDF Export
+
+### 🔄 Integrations - In Progress
+- [ ] GitHub and LinkedIn integration
+- [ ] File uploads (e.g., PDFs)
+- [ ] Language selector
+
+### 🤖 AI Agent - Coming Soon
+- [ ] Job opportunity search
+- [ ] Interview simulation
+- [ ] Auto-apply for jobs
+
+
+### 🛡️ Decentralized Storage - Coming Soon
+- [ ] Store data using IPFS + Blockchain
+- [ ] Full user control over data
+
+
+
+
+## 🛠️ Tech Stack
+- AI Orchestration: OpenAI, LangChain, LangGraph
+- Frontend: Next.js, TypeScript
+- External APIs: LinkedIn, GitHub, public job listings
+- Blockchain: IPFS for decentralized and immutable data storage
+
+
+## How MVP works
+
 The user provides:
 - Their original resume (via upload or guided form).
-- A link or description of the job they’re applying for.
-- (Optional) Connects accounts (via API or scraping):
-- LinkedIn: to import experience, recommendations, certifications.
-- GitHub: to import projects, contributions, technologies used.
-
-### AI Processing
+- A description of the job they’re applying for.
 - An AI agent analyzes the resume and the job posting.
 - Generates a customized version of the resume tailored to the role (highlighting keywords, most relevant experiences, etc.).
 - Suggests improvements and/or missing fields (e.g., recommended courses, missing keywords).
 
-### Extra Features
-- Suggestions for projects or summaries to highlight based on GitHub data.
-- Automatic import of relevant public information.
-- Option to save multiple resume versions for different job types.
+## 1. Running the app
 
-⸻
+### ➤ Create a virtual environment:
 
-### Decentralized Layer – Blockchain Use
+```bash
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
 
-In traditional systems, user data (resumes, application history, adapted versions) is stored in the company’s database. If the company shuts down (like Orkut, MSN, etc.), the user loses all their data.
+### ➤ Install backend dependencies:
+```
+pip install -r requirements.txt
+```
 
-#### Proposed Solution: 
-Use a public or private blockchain to store the most important information in a decentralized way, ensuring:
-- Data Ownership: users remain the owners of their resumes and history.
-- Guaranteed Access: even if the company/platform ceases to exist, the data remains accessible via the blockchain.
-- Transparency & Trust: each resume update can be recorded, creating an immutable version history (which can even serve as a career portfolio).
+### ➤ Install frontend dependencies:
+```
+npm install
+```
+###  ➤ Run the frontend 
+```
+npm run dev
+```
 
-#### Possibilities:
-- Use IPFS + blockchain to store documents with metadata.
-- Create an NFT as a professional identity (optional), pointing to the adapted and updated resume.
-- Ensure privacy through encryption and user-controlled access.
+## Contributors:
 
-# Running the app
+- wqNNk5 - @Leticia 
+- jm5F5V - @spineydan
+- dbOsmn - @Matthew Osei-Ansah
+- RJmHfR - @0xEmmalien(GMT+1)
+- TuYQ1V - @Loris
+- and more.
 
-- npm install
-- pip install -r requirements.txt
-- npm run dev
 
-# Features to add/improve
-
-- Leverage leticia python files? https://github.com/letpires/CVMatcher/tree/7ab3e4b03acf6514fe83333885362f4a0b3762ab
-
-- Buttom to choose the language
-- Check how to have input files with open ai (https://stackoverflow.com/questions/77469097/how-can-i-process-a-pdf-using-openais-apis-gpts)
-- Response pdf to download
-- Request to Github is not working yet
-- Verify blockchain part IFPS
-
-# Demo - version 1
+# Demo
 
 ![Demo](https://github.com/letpires/CVMatcher/blob/main/demo_version1.gif)
