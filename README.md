@@ -114,4 +114,4 @@ npm run dev
 
 # Demo
 
-![Demo](https://github.com/letpires/CVMatcher/blob/main/demo_version1.gif)
+![Demo](https://github.com/letpires/CVMatcher/blob/main/demo_version2.gif)
